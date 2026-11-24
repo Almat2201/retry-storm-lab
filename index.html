@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compare retry policies under an identical simulated service outage.">
+  <meta name="color-scheme" content="dark">
+  <title>Retry Storm Lab</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./dashboard.mjs"></script>
+</head>
+<body>
+  <main>
+    <header class="masthead">
+      <a class="brand" href="./" aria-label="Retry Storm Lab home"><span aria-hidden="true">↻</span> Retry Storm Lab</a>
+      <a class="source" href="https://github.com/Almat2201/retry-storm-lab">Source on GitHub <span aria-hidden="true">↗</span></a>
+    </header>
+    <div class="intro">
+      <h1>When retries overwhelm a service</h1>
+      <p>Run three retry policies against the same simulated slowdown and compare how much work the service does and how many requests succeed.</p>
+    </div>
+    <section class="workspace" aria-label="Simulation">
+      <form id="controls" class="panel">
+        <h2>Scenario</h2>
+        <label for="scenario">Preset</label>
+        <select id="scenario">
+          <option value="slowdown">Service slowdown</option>
+          <option value="outage">Hard outage</option>
+          <option value="healthy">Healthy service</option>
+        </select>
+        <label for="rate">Incoming requests <output id="rate-label" for="rate">110/s</output></label>
+        <input type="range" id="rate" min="30" max="220" step="5" value="110">
+        <label for="timeout">Attempt timeout <output id="timeout-label" for="timeout">280 ms</output></label>
+        <input type="range" id="timeout" min="100" max="800" step="20" value="280">
+        <label for="seed">Random seed</label>
+        <input type="number" id="seed" min="0" max="4294967295" value="42" required>
+        <button type="submit">Run simulation <span aria-hidden="true">→</span></button>
+        <p id="status" role="status"></p>
+      </form>
+      <section class="results" aria-label="Results">
+        <div class="summary" id="summary" aria-label="Policy comparison"></div>
+        <section class="panel charts" aria-labelledby="charts-title">
+          <div class="chart-header">
+            <h2 id="charts-title">Traffic over time</h2>
+            <div id="outage-key"><span aria-hidden="true"></span> Degraded service</div>
+          </div>
+          <figure>
+            <figcaption>Attempt rate <small>attempts/s</small></figcaption>
+            <canvas id="attempts" role="img" aria-label="Attempt rate by retry policy. Download the CSV for exact values."></canvas>
+          </figure>
+          <figure>
+            <figcaption>Successful requests <small>requests/s</small></figcaption>
+            <canvas id="successes" role="img" aria-label="Successful requests per second by retry policy. Download the CSV for exact values."></canvas>
+          </figure>
+          <button class="secondary" type="button" id="download">Download CSV <span aria-hidden="true">↓</span></button>
+        </section>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
